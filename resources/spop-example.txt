@@ -1,0 +1,18 @@
+The following is a hex dump of the data part of an SPOP TCP packet.
+
+This is an ACK frame (a response from coraza-spoa) which tells HAProxy
+to set a var called "fail" to "0" which allows the request to proceed.
+
+
+00 00 00 14 67 00 00 00 01 f5 a2 b1 09 01 01 03 02 04 66 61 69 6c 04 00
+          |  |           |           |  |  |  |  |   |          |_____| Val=INT64=0
+          |  |           |           |  |  |  |  |   |__________|str="fail"
+          |  |           |           |  |  |  |  |___| Var name len=4
+          |  |           |           |  |  |  |__| Var scope=2=transaction
+          |  |           |           |  |  |__| NB ARGS always 3 for set-var
+          |  |           |           |  |__| Action type=1=set-var
+          |  |           |           |__| Frame ID=1
+          |  |           |___________| Stream ID=245930121
+          |  |___________| Flags=FIN
+          |__| Frame=103=AgentACK
+__________|length is 20 bytes

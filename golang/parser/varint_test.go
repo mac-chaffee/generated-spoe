@@ -1,10 +1,9 @@
-package test
+package parser
 
 import (
 	"bytes"
 	"testing"
 
-	"github.com/mac-chaffee/generated-spoe/golang/parser"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/kaitai-io/kaitai_struct_go_runtime/kaitai"
@@ -25,7 +24,7 @@ var intmap map[int][]byte = map[int][]byte{
 // Makes sure that the varint sub-grammar can parse numbers correctly
 func TestVarInt(t *testing.T) {
 	for expected, raw := range intmap {
-		varint := parser.NewVarint()
+		varint := NewVarint()
 		buf := bytes.NewReader(raw)
 		stream := kaitai.NewStream(buf)
 		if err := varint.Read(stream, nil, varint); err != nil {

@@ -123,6 +123,37 @@ func (this *Spop_Ipv4) Read(io *kaitai.Stream, parent *Spop_TypedData, root *Spo
 	this.Addr = tmp5
 	return err
 }
+type Spop_Kv struct {
+	KvName *Spop_SpopString
+	KvValue *Spop_TypedData
+	_io *kaitai.Stream
+	_root *Spop
+	_parent interface{}
+}
+func NewSpop_Kv() *Spop_Kv {
+	return &Spop_Kv{
+	}
+}
+
+func (this *Spop_Kv) Read(io *kaitai.Stream, parent interface{}, root *Spop) (err error) {
+	this._io = io
+	this._parent = parent
+	this._root = root
+
+	tmp6 := NewSpop_SpopString()
+	err = tmp6.Read(this._io, this, this._root)
+	if err != nil {
+		return err
+	}
+	this.KvName = tmp6
+	tmp7 := NewSpop_TypedData()
+	err = tmp7.Read(this._io, this, this._root)
+	if err != nil {
+		return err
+	}
+	this.KvValue = tmp7
+	return err
+}
 type Spop_SpopString struct {
 	StrLen *Varint
 	StrData string
@@ -140,22 +171,22 @@ func (this *Spop_SpopString) Read(io *kaitai.Stream, parent interface{}, root *S
 	this._parent = parent
 	this._root = root
 
-	tmp6 := NewVarint()
-	err = tmp6.Read(this._io, this, nil)
+	tmp8 := NewVarint()
+	err = tmp8.Read(this._io, this, nil)
 	if err != nil {
 		return err
 	}
-	this.StrLen = tmp6
-	tmp7, err := this.StrLen.Value()
+	this.StrLen = tmp8
+	tmp9, err := this.StrLen.Value()
 	if err != nil {
 		return err
 	}
-	tmp8, err := this._io.ReadBytes(int(tmp7))
+	tmp10, err := this._io.ReadBytes(int(tmp9))
 	if err != nil {
 		return err
 	}
-	tmp8 = tmp8
-	this.StrData = string(tmp8)
+	tmp10 = tmp10
+	this.StrData = string(tmp10)
 	return err
 }
 type Spop_ActionSetVar struct {
@@ -164,35 +195,35 @@ type Spop_ActionSetVar struct {
 	VarValue *Spop_TypedData
 	_io *kaitai.Stream
 	_root *Spop
-	_parent *Spop_ListOfActions
+	_parent *Spop_Action
 }
 func NewSpop_ActionSetVar() *Spop_ActionSetVar {
 	return &Spop_ActionSetVar{
 	}
 }
 
-func (this *Spop_ActionSetVar) Read(io *kaitai.Stream, parent *Spop_ListOfActions, root *Spop) (err error) {
+func (this *Spop_ActionSetVar) Read(io *kaitai.Stream, parent *Spop_Action, root *Spop) (err error) {
 	this._io = io
 	this._parent = parent
 	this._root = root
 
-	tmp9, err := this._io.ReadU1()
+	tmp11, err := this._io.ReadU1()
 	if err != nil {
 		return err
 	}
-	this.VarScope = Spop_VarScope(tmp9)
-	tmp10 := NewSpop_SpopString()
-	err = tmp10.Read(this._io, this, this._root)
+	this.VarScope = Spop_VarScope(tmp11)
+	tmp12 := NewSpop_SpopString()
+	err = tmp12.Read(this._io, this, this._root)
 	if err != nil {
 		return err
 	}
-	this.VarName = tmp10
-	tmp11 := NewSpop_TypedData()
-	err = tmp11.Read(this._io, this, this._root)
+	this.VarName = tmp12
+	tmp13 := NewSpop_TypedData()
+	err = tmp13.Read(this._io, this, this._root)
 	if err != nil {
 		return err
 	}
-	this.VarValue = tmp11
+	this.VarValue = tmp13
 	return err
 }
 type Spop_MetaFlags struct {
@@ -213,21 +244,21 @@ func (this *Spop_MetaFlags) Read(io *kaitai.Stream, parent *Spop_FrameMeta, root
 	this._parent = parent
 	this._root = root
 
-	tmp12, err := this._io.ReadBitsIntBe(30)
+	tmp14, err := this._io.ReadBitsIntBe(30)
 	if err != nil {
 		return err
 	}
-	this.ReservedFlags = tmp12
-	tmp13, err := this._io.ReadBitsIntBe(1)
+	this.ReservedFlags = tmp14
+	tmp15, err := this._io.ReadBitsIntBe(1)
 	if err != nil {
 		return err
 	}
-	this.AbortFlag = tmp13 != 0
-	tmp14, err := this._io.ReadBitsIntBe(1)
+	this.AbortFlag = tmp15 != 0
+	tmp16, err := this._io.ReadBitsIntBe(1)
 	if err != nil {
 		return err
 	}
-	this.FinFlag = tmp14 != 0
+	this.FinFlag = tmp16 != 0
 	return err
 }
 type Spop_Frame struct {
@@ -248,67 +279,67 @@ func (this *Spop_Frame) Read(io *kaitai.Stream, parent *Spop, root *Spop) (err e
 	this._parent = parent
 	this._root = root
 
-	tmp15, err := this._io.ReadU1()
+	tmp17, err := this._io.ReadU1()
 	if err != nil {
 		return err
 	}
-	this.FrameType = Spop_FrameType(tmp15)
-	tmp16 := NewSpop_FrameMeta()
-	err = tmp16.Read(this._io, this, this._root)
+	this.FrameType = Spop_FrameType(tmp17)
+	tmp18 := NewSpop_FrameMeta()
+	err = tmp18.Read(this._io, this, this._root)
 	if err != nil {
 		return err
 	}
-	this.FrameMeta = tmp16
+	this.FrameMeta = tmp18
 	switch (this.FrameType) {
 	case Spop_FrameType__Notify:
-		tmp17 := NewSpop_ListOfMessages()
-		err = tmp17.Read(this._io, this, this._root)
-		if err != nil {
-			return err
-		}
-		this.FramePayload = tmp17
-	case Spop_FrameType__AgentHello:
-		tmp18 := NewSpop_KvList()
-		err = tmp18.Read(this._io, this, this._root)
-		if err != nil {
-			return err
-		}
-		this.FramePayload = tmp18
-	case Spop_FrameType__Unset:
-		tmp19 := NewSpop_FragmentedFrame()
+		tmp19 := NewSpop_ListOfMessages()
 		err = tmp19.Read(this._io, this, this._root)
 		if err != nil {
 			return err
 		}
 		this.FramePayload = tmp19
-	case Spop_FrameType__AgentDisconnect:
+	case Spop_FrameType__AgentHello:
 		tmp20 := NewSpop_KvList()
 		err = tmp20.Read(this._io, this, this._root)
 		if err != nil {
 			return err
 		}
 		this.FramePayload = tmp20
-	case Spop_FrameType__Ack:
-		tmp21 := NewSpop_ListOfActions()
+	case Spop_FrameType__Unset:
+		tmp21 := NewSpop_FragmentedFrame()
 		err = tmp21.Read(this._io, this, this._root)
 		if err != nil {
 			return err
 		}
 		this.FramePayload = tmp21
-	case Spop_FrameType__HaproxyDisconnect:
+	case Spop_FrameType__AgentDisconnect:
 		tmp22 := NewSpop_KvList()
 		err = tmp22.Read(this._io, this, this._root)
 		if err != nil {
 			return err
 		}
 		this.FramePayload = tmp22
-	case Spop_FrameType__HaproxyHello:
-		tmp23 := NewSpop_KvList()
+	case Spop_FrameType__Ack:
+		tmp23 := NewSpop_ListOfActions()
 		err = tmp23.Read(this._io, this, this._root)
 		if err != nil {
 			return err
 		}
 		this.FramePayload = tmp23
+	case Spop_FrameType__HaproxyDisconnect:
+		tmp24 := NewSpop_KvList()
+		err = tmp24.Read(this._io, this, this._root)
+		if err != nil {
+			return err
+		}
+		this.FramePayload = tmp24
+	case Spop_FrameType__HaproxyHello:
+		tmp25 := NewSpop_KvList()
+		err = tmp25.Read(this._io, this, this._root)
+		if err != nil {
+			return err
+		}
+		this.FramePayload = tmp25
 	}
 	return err
 }
@@ -330,95 +361,93 @@ func (this *Spop_TypedData) Read(io *kaitai.Stream, parent interface{}, root *Sp
 	this._parent = parent
 	this._root = root
 
-	tmp24, err := this._io.ReadBitsIntBe(4)
+	tmp26, err := this._io.ReadBitsIntBe(4)
 	if err != nil {
 		return err
 	}
-	this.TypeFlags = tmp24
-	tmp25, err := this._io.ReadBitsIntBe(4)
+	this.TypeFlags = tmp26
+	tmp27, err := this._io.ReadBitsIntBe(4)
 	if err != nil {
 		return err
 	}
-	this.Type = tmp25
+	this.Type = tmp27
 	this._io.AlignToByte()
 	switch (this.Type) {
 	case 0:
-		tmp26 := NewSpop_SpopBool(this.TypeFlags)
-		err = tmp26.Read(this._io, this, this._root)
-		if err != nil {
-			return err
-		}
-		this.TypeData = tmp26
-	case 4:
-		tmp27 := NewVarint()
-		err = tmp27.Read(this._io, this, nil)
-		if err != nil {
-			return err
-		}
-		this.TypeData = tmp27
-	case 6:
-		tmp28 := NewSpop_Ipv4()
+		tmp28 := NewSpop_SpopBool(this.TypeFlags)
 		err = tmp28.Read(this._io, this, this._root)
 		if err != nil {
 			return err
 		}
 		this.TypeData = tmp28
-	case 7:
-		tmp29 := NewSpop_Ipv6()
-		err = tmp29.Read(this._io, this, this._root)
+	case 4:
+		tmp29 := NewVarint()
+		err = tmp29.Read(this._io, this, nil)
 		if err != nil {
 			return err
 		}
 		this.TypeData = tmp29
-	case 1:
-		tmp30 := NewSpop_NullType()
+	case 6:
+		tmp30 := NewSpop_Ipv4()
 		err = tmp30.Read(this._io, this, this._root)
 		if err != nil {
 			return err
 		}
 		this.TypeData = tmp30
-	case 3:
-		tmp31 := NewVarint()
-		err = tmp31.Read(this._io, this, nil)
+	case 7:
+		tmp31 := NewSpop_Ipv6()
+		err = tmp31.Read(this._io, this, this._root)
 		if err != nil {
 			return err
 		}
 		this.TypeData = tmp31
-	case 5:
-		tmp32 := NewVarint()
-		err = tmp32.Read(this._io, this, nil)
+	case 1:
+		tmp32 := NewSpop_NullType()
+		err = tmp32.Read(this._io, this, this._root)
 		if err != nil {
 			return err
 		}
 		this.TypeData = tmp32
-	case 8:
-		tmp33 := NewSpop_SpopString()
-		err = tmp33.Read(this._io, this, this._root)
+	case 3:
+		tmp33 := NewVarint()
+		err = tmp33.Read(this._io, this, nil)
 		if err != nil {
 			return err
 		}
 		this.TypeData = tmp33
-	case 9:
-		tmp34 := NewSpop_SpopString()
-		err = tmp34.Read(this._io, this, this._root)
+	case 5:
+		tmp34 := NewVarint()
+		err = tmp34.Read(this._io, this, nil)
 		if err != nil {
 			return err
 		}
 		this.TypeData = tmp34
-	case 2:
-		tmp35 := NewVarint()
-		err = tmp35.Read(this._io, this, nil)
+	case 8:
+		tmp35 := NewSpop_SpopString()
+		err = tmp35.Read(this._io, this, this._root)
 		if err != nil {
 			return err
 		}
 		this.TypeData = tmp35
+	case 9:
+		tmp36 := NewSpop_SpopString()
+		err = tmp36.Read(this._io, this, this._root)
+		if err != nil {
+			return err
+		}
+		this.TypeData = tmp36
+	case 2:
+		tmp37 := NewVarint()
+		err = tmp37.Read(this._io, this, nil)
+		if err != nil {
+			return err
+		}
+		this.TypeData = tmp37
 	}
 	return err
 }
 type Spop_ListOfMessages struct {
-	MessageName *Spop_SpopString
-	NbArgs uint8
-	KvList []*Spop_KvList
+	Messages []*Spop_Message
 	_io *kaitai.Stream
 	_root *Spop
 	_parent *Spop_Frame
@@ -433,25 +462,20 @@ func (this *Spop_ListOfMessages) Read(io *kaitai.Stream, parent *Spop_Frame, roo
 	this._parent = parent
 	this._root = root
 
-	tmp36 := NewSpop_SpopString()
-	err = tmp36.Read(this._io, this, this._root)
-	if err != nil {
-		return err
-	}
-	this.MessageName = tmp36
-	tmp37, err := this._io.ReadU1()
-	if err != nil {
-		return err
-	}
-	this.NbArgs = tmp37
-	for i := 0; i < int(this.NbArgs); i++ {
-		_ = i
-		tmp38 := NewSpop_KvList()
-		err = tmp38.Read(this._io, this, this._root)
+	for i := 1;; i++ {
+		tmp38, err := this._io.EOF()
 		if err != nil {
 			return err
 		}
-		this.KvList = append(this.KvList, tmp38)
+		if tmp38 {
+			break
+		}
+		tmp39 := NewSpop_Message()
+		err = tmp39.Read(this._io, this, this._root)
+		if err != nil {
+			return err
+		}
+		this.Messages = append(this.Messages, tmp39)
 	}
 	return err
 }
@@ -460,29 +484,29 @@ type Spop_ActionUnsetVar struct {
 	VarName *Spop_SpopString
 	_io *kaitai.Stream
 	_root *Spop
-	_parent *Spop_ListOfActions
+	_parent *Spop_Action
 }
 func NewSpop_ActionUnsetVar() *Spop_ActionUnsetVar {
 	return &Spop_ActionUnsetVar{
 	}
 }
 
-func (this *Spop_ActionUnsetVar) Read(io *kaitai.Stream, parent *Spop_ListOfActions, root *Spop) (err error) {
+func (this *Spop_ActionUnsetVar) Read(io *kaitai.Stream, parent *Spop_Action, root *Spop) (err error) {
 	this._io = io
 	this._parent = parent
 	this._root = root
 
-	tmp39, err := this._io.ReadU1()
+	tmp40, err := this._io.ReadU1()
 	if err != nil {
 		return err
 	}
-	this.VarScope = Spop_VarScope(tmp39)
-	tmp40 := NewSpop_SpopString()
-	err = tmp40.Read(this._io, this, this._root)
+	this.VarScope = Spop_VarScope(tmp40)
+	tmp41 := NewSpop_SpopString()
+	err = tmp41.Read(this._io, this, this._root)
 	if err != nil {
 		return err
 	}
-	this.VarName = tmp40
+	this.VarName = tmp41
 	return err
 }
 type Spop_FrameMeta struct {
@@ -504,31 +528,31 @@ func (this *Spop_FrameMeta) Read(io *kaitai.Stream, parent *Spop_Frame, root *Sp
 	this._parent = parent
 	this._root = root
 
-	tmp41, err := this._io.ReadBytes(int(4))
+	tmp42, err := this._io.ReadBytes(int(4))
 	if err != nil {
 		return err
 	}
-	tmp41 = tmp41
-	this._raw_MetaFlags = tmp41
+	tmp42 = tmp42
+	this._raw_MetaFlags = tmp42
 	_io__raw_MetaFlags := kaitai.NewStream(bytes.NewReader(this._raw_MetaFlags))
-	tmp42 := NewSpop_MetaFlags()
-	err = tmp42.Read(_io__raw_MetaFlags, this, this._root)
+	tmp43 := NewSpop_MetaFlags()
+	err = tmp43.Read(_io__raw_MetaFlags, this, this._root)
 	if err != nil {
 		return err
 	}
-	this.MetaFlags = tmp42
-	tmp43 := NewVarint()
-	err = tmp43.Read(this._io, this, nil)
-	if err != nil {
-		return err
-	}
-	this.StreamId = tmp43
+	this.MetaFlags = tmp43
 	tmp44 := NewVarint()
 	err = tmp44.Read(this._io, this, nil)
 	if err != nil {
 		return err
 	}
-	this.FrameId = tmp44
+	this.StreamId = tmp44
+	tmp45 := NewVarint()
+	err = tmp45.Read(this._io, this, nil)
+	if err != nil {
+		return err
+	}
+	this.FrameId = tmp45
 	return err
 }
 type Spop_Ipv6 struct {
@@ -547,43 +571,85 @@ func (this *Spop_Ipv6) Read(io *kaitai.Stream, parent *Spop_TypedData, root *Spo
 	this._parent = parent
 	this._root = root
 
-	tmp45, err := this._io.ReadBytes(int(16))
+	tmp46, err := this._io.ReadBytes(int(16))
 	if err != nil {
 		return err
 	}
-	tmp45 = tmp45
-	this.Addr = tmp45
+	tmp46 = tmp46
+	this.Addr = tmp46
 	return err
 }
 type Spop_KvList struct {
-	KvName *Spop_SpopString
-	KvValue *Spop_TypedData
+	Kvs []*Spop_Kv
 	_io *kaitai.Stream
 	_root *Spop
-	_parent interface{}
+	_parent *Spop_Frame
 }
 func NewSpop_KvList() *Spop_KvList {
 	return &Spop_KvList{
 	}
 }
 
-func (this *Spop_KvList) Read(io *kaitai.Stream, parent interface{}, root *Spop) (err error) {
+func (this *Spop_KvList) Read(io *kaitai.Stream, parent *Spop_Frame, root *Spop) (err error) {
 	this._io = io
 	this._parent = parent
 	this._root = root
 
-	tmp46 := NewSpop_SpopString()
-	err = tmp46.Read(this._io, this, this._root)
+	for i := 1;; i++ {
+		tmp47, err := this._io.EOF()
+		if err != nil {
+			return err
+		}
+		if tmp47 {
+			break
+		}
+		tmp48 := NewSpop_Kv()
+		err = tmp48.Read(this._io, this, this._root)
+		if err != nil {
+			return err
+		}
+		this.Kvs = append(this.Kvs, tmp48)
+	}
+	return err
+}
+type Spop_Message struct {
+	MessageName *Spop_SpopString
+	NbArgs uint8
+	Kvs []*Spop_Kv
+	_io *kaitai.Stream
+	_root *Spop
+	_parent *Spop_ListOfMessages
+}
+func NewSpop_Message() *Spop_Message {
+	return &Spop_Message{
+	}
+}
+
+func (this *Spop_Message) Read(io *kaitai.Stream, parent *Spop_ListOfMessages, root *Spop) (err error) {
+	this._io = io
+	this._parent = parent
+	this._root = root
+
+	tmp49 := NewSpop_SpopString()
+	err = tmp49.Read(this._io, this, this._root)
 	if err != nil {
 		return err
 	}
-	this.KvName = tmp46
-	tmp47 := NewSpop_TypedData()
-	err = tmp47.Read(this._io, this, this._root)
+	this.MessageName = tmp49
+	tmp50, err := this._io.ReadU1()
 	if err != nil {
 		return err
 	}
-	this.KvValue = tmp47
+	this.NbArgs = tmp50
+	for i := 0; i < int(this.NbArgs); i++ {
+		_ = i
+		tmp51 := NewSpop_Kv()
+		err = tmp51.Read(this._io, this, this._root)
+		if err != nil {
+			return err
+		}
+		this.Kvs = append(this.Kvs, tmp51)
+	}
 	return err
 }
 
@@ -637,9 +703,7 @@ func (this *Spop_NullType) Read(io *kaitai.Stream, parent *Spop_TypedData, root 
 	return err
 }
 type Spop_ListOfActions struct {
-	ActionType Spop_ActionType
-	NbArgs uint8
-	ActionArgs interface{}
+	Actions []*Spop_Action
 	_io *kaitai.Stream
 	_root *Spop
 	_parent *Spop_Frame
@@ -654,31 +718,66 @@ func (this *Spop_ListOfActions) Read(io *kaitai.Stream, parent *Spop_Frame, root
 	this._parent = parent
 	this._root = root
 
-	tmp48, err := this._io.ReadU1()
+	for i := 1;; i++ {
+		tmp52, err := this._io.EOF()
+		if err != nil {
+			return err
+		}
+		if tmp52 {
+			break
+		}
+		tmp53 := NewSpop_Action()
+		err = tmp53.Read(this._io, this, this._root)
+		if err != nil {
+			return err
+		}
+		this.Actions = append(this.Actions, tmp53)
+	}
+	return err
+}
+type Spop_Action struct {
+	ActionType Spop_ActionType
+	NbArgs uint8
+	ActionArgs interface{}
+	_io *kaitai.Stream
+	_root *Spop
+	_parent *Spop_ListOfActions
+}
+func NewSpop_Action() *Spop_Action {
+	return &Spop_Action{
+	}
+}
+
+func (this *Spop_Action) Read(io *kaitai.Stream, parent *Spop_ListOfActions, root *Spop) (err error) {
+	this._io = io
+	this._parent = parent
+	this._root = root
+
+	tmp54, err := this._io.ReadU1()
 	if err != nil {
 		return err
 	}
-	this.ActionType = Spop_ActionType(tmp48)
-	tmp49, err := this._io.ReadU1()
+	this.ActionType = Spop_ActionType(tmp54)
+	tmp55, err := this._io.ReadU1()
 	if err != nil {
 		return err
 	}
-	this.NbArgs = tmp49
+	this.NbArgs = tmp55
 	switch (this.ActionType) {
 	case Spop_ActionType__SetVar:
-		tmp50 := NewSpop_ActionSetVar()
-		err = tmp50.Read(this._io, this, this._root)
+		tmp56 := NewSpop_ActionSetVar()
+		err = tmp56.Read(this._io, this, this._root)
 		if err != nil {
 			return err
 		}
-		this.ActionArgs = tmp50
+		this.ActionArgs = tmp56
 	case Spop_ActionType__UnsetVar:
-		tmp51 := NewSpop_ActionUnsetVar()
-		err = tmp51.Read(this._io, this, this._root)
+		tmp57 := NewSpop_ActionUnsetVar()
+		err = tmp57.Read(this._io, this, this._root)
 		if err != nil {
 			return err
 		}
-		this.ActionArgs = tmp51
+		this.ActionArgs = tmp57
 	}
 	return err
 }

@@ -56,6 +56,11 @@ types:
         type: b1
   list_of_actions:
     seq:
+      - id: actions
+        type: action
+        repeat: eos
+  action:
+    seq:
       - id: action_type
         type: u1
         enum: action_type
@@ -70,15 +75,25 @@ types:
             'action_type::unset_var': action_unset_var
   list_of_messages:
     seq:
+      - id: messages
+        type: message
+        repeat: eos
+  message:
+    seq:
       - id: message_name
         type: spop_string
       - id: nb_args
         type: u1
-      - id: kv_list
-        type: kv_list
+      - id: kvs
+        type: kv
         repeat: expr
         repeat-expr: nb_args
   kv_list:
+    seq:
+      - id: kvs
+        type: kv
+        repeat: eos
+  kv:
     seq:
       - id: kv_name
         type: spop_string

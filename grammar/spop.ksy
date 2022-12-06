@@ -7,26 +7,36 @@ meta:
     - varint
 doc-ref: https://github.com/haproxy/haproxy/blob/v2.7.0/doc/SPOE.txt
 seq:
-  - id: frame_len
+  - id: len_frame
     type: u4
-  - id: frame_type
-    type: u1
-    enum: frame_type
-  - id: frame_meta
-    type: frame_meta
-  - id: frame_payload
-    #size: frame_len - 1 - sizeof(frame_meta)
-    type:
-      switch-on: frame_type
-      cases:
-        # 'frame_type::unset': fragmented_frame
-        # 'frame_type::haproxy_hello':: kv_list
-        # 'frame_type::haproxy_disconnect': kv_list
-        'frame_type::notify': list_of_messages
-        # 'frame_type::agent_hello': kv_list
-        # 'frame_type::agent_disconnect': kv_list
-        'frame_type::ack': list_of_actions
+  - id: frame
+    type: frame
+    size: len_frame
 types:
+  frame:
+    seq:
+      - id: frame_type
+        type: u1
+        enum: frame_type
+      - id: frame_meta
+        type: frame_meta
+      - id: frame_payload
+        type:
+          switch-on: frame_type
+          cases:
+            'frame_type::unset': fragmented_frame
+            'frame_type::haproxy_hello': kv_list
+            'frame_type::haproxy_disconnect': kv_list
+            'frame_type::notify': list_of_messages
+            'frame_type::agent_hello': kv_list
+            'frame_type::agent_disconnect': kv_list
+            'frame_type::ack': list_of_actions
+  fragmented_frame:
+    seq:
+      # When encountering a raw frame, calling code needs to
+      # concat all the raw data and re-parse
+      - id: raw_data
+        size-eos: true
   frame_meta:
     seq:
       - id: meta_flags
@@ -101,7 +111,7 @@ types:
         type:
           switch-on: type
           cases:
-            # 0: bool
+            0: spop_bool(type_flags)
             1: null_type
             2: varint
             3: varint
@@ -121,6 +131,12 @@ types:
         encoding: ASCII
         size: str_len.value
   spop_bool:
+    params:
+      - id: type_flags
+        type: b4
+    instances:
+      value:
+        value: type_flags
     doc: "bools pull their values from the type_flags"
   null_type: {}
   ipv6:

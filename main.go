@@ -26,5 +26,5 @@ func main() {
 		fmt.Println("Usage: go run main.go <binary file>")
 	}
 	spop := parse(os.Args[1])
-	fmt.Printf("Frame Length: %d\n", spop.FrameLen)
+	fmt.Printf("Frame Length: %d\n", spop.LenFrame)
 }

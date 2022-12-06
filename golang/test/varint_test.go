@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/mac-chaffee/generated-spoe/parser"
+	"github.com/mac-chaffee/generated-spoe/golang/parser"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/kaitai-io/kaitai_struct_go_runtime/kaitai"

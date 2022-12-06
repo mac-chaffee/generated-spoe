@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/kaitai-io/kaitai_struct_go_runtime/kaitai"
-	"github.com/mac-chaffee/generated-spoe/parser"
+	"github.com/mac-chaffee/generated-spoe/golang/parser"
 )
 
 func parse(filename string) *parser.Spop {
@@ -22,8 +22,9 @@ func parse(filename string) *parser.Spop {
 }
 
 func main() {
-	if len(os.Args) != 2 {
+	if len(os.Args) < 2 {
 		fmt.Println("Usage: go run main.go <binary file>")
+		return
 	}
 	spop := parse(os.Args[1])
 	fmt.Printf("Frame Length: %d\n", spop.LenFrame)

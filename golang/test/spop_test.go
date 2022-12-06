@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/mac-chaffee/generated-spoe/parser"
+	"github.com/mac-chaffee/generated-spoe/golang/parser"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/kaitai-io/kaitai_struct_go_runtime/kaitai"
@@ -26,7 +26,7 @@ func parse(filename string) *parser.Spop {
 
 // Reference resources/spop-example.txt to see the frame decoded manually
 func TestAckFrame(t *testing.T) {
-	spop := parse("../resources/ack_frame.bin")
+	spop := parse("../../resources/ack_frame.bin")
 	// Must use EqualValues since LenFrame is actually uint32=0x14
 	assert.EqualValues(t, 20, spop.LenFrame)
 	assert.Equal(t, parser.Spop_FrameType__Ack, spop.Frame.FrameType)
@@ -56,7 +56,7 @@ func TestAckFrame(t *testing.T) {
 }
 
 func TestNotifyFrame(t *testing.T) {
-	spop := parse("../resources/notify_frame.bin")
+	spop := parse("../../resources/notify_frame.bin")
 	// Must use EqualValues since LenFrame is actually uint32
 	assert.EqualValues(t, 883, spop.LenFrame)
 	assert.Equal(t, parser.Spop_FrameType__Notify, spop.Frame.FrameType)

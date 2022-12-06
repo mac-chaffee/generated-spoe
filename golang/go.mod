@@ -1,4 +1,4 @@
-module github.com/mac-chaffee/generated-spoe
+module github.com/mac-chaffee/generated-spoe/golang
 
 go 1.19
 
